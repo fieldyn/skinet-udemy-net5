@@ -13,8 +13,8 @@ export class ShopComponent implements OnInit {
   products: IProduct[] = [];
   brands: IBrand[] = [];
   types: IType[] = [];
-  brandIdSelected: number | null | undefined;
-  typeIdSelected: number | null | undefined;
+  brandIdSelected: number = 0;
+  typeIdSelected: number = 0;
 
   constructor(private shopService: ShopService) {}
 
