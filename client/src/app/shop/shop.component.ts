@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IBrand } from '../shared/models/brand';
 import { IProduct } from '../shared/models/product';
 import { IType } from '../shared/models/productType';
+import { ShopParams } from '../shared/models/shopParams';
 import { ShopService } from './shop.service';
 
 @Component({
@@ -13,9 +14,8 @@ export class ShopComponent implements OnInit {
   products: IProduct[] = [];
   brands: IBrand[] = [];
   types: IType[] = [];
-  brandIdSelected: number = 0;
-  typeIdSelected: number = 0;
-  sortSelected = 'name';
+  shopParams = new ShopParams();
+  totalCount: number = 0;
   sortOptions = [
     { name: 'Alphabetical', value: 'name' },
     { name: 'Price: Low to High', value: 'priceAsc' },
@@ -32,10 +32,13 @@ export class ShopComponent implements OnInit {
 
   getProducts() {
     this.shopService
-      .getProducts(this.brandIdSelected, this.typeIdSelected, this.sortSelected)
+      .getProducts(this.shopParams)
       .subscribe(
         (response) => {
-          this.products = response?.data ?? [];
+          this.products = response?.data ?? this.products;
+          this.shopParams.pageNumber = response?.pageIndex ?? this.shopParams.pageNumber;
+          this.shopParams.pageSize = response?.pageSize ?? this.shopParams.pageSize;
+          this.totalCount = response?.count ?? this.totalCount;
         },
         (error) => {
           console.log(error);
@@ -66,17 +69,22 @@ export class ShopComponent implements OnInit {
   }
 
   onBrandSelected(brandId: number) {
-    this.brandIdSelected = brandId;
+    this.shopParams.brandId = brandId;
     this.getProducts();
   }
 
   onTypeSelected(typeId: number) {
-    this.typeIdSelected = typeId;
+    this.shopParams.typeId = typeId;
     this.getProducts();
   }
 
   onSortSelected(sort: string) {
-    this.sortSelected = sort;
+    this.shopParams.sort = sort;
+    this.getProducts();
+  }
+
+  onPageChanged(event: any): void {
+    this.shopParams.pageNumber = event.page;
     this.getProducts();
   }
 }

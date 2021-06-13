@@ -5,6 +5,7 @@ import { IBrand } from '../shared/models/brand';
 import { IPagination } from '../shared/models/pagination';
 import { IType } from '../shared/models/productType';
 import { map } from 'rxjs/operators';
+import { ShopParams } from '../shared/models/shopParams';
 
 @Injectable({
   providedIn: 'root',
@@ -13,24 +14,28 @@ export class ShopService {
   baseUrl = 'http://localhost:5000/api/';
   constructor(private http: HttpClient) {}
 
-  getProducts(brandId?: number |null, typeId?: number|null, sort?: string): Observable<IPagination | null> {
+  getProducts(shopParams: ShopParams): Observable<IPagination | null> {
     let params = new HttpParams();
 
-    if (brandId) {
-      params = params.append('brandId', brandId.toString());
+    if (shopParams.brandId !== 0) {
+      params = params.append('brandId', shopParams.brandId.toString());
     }
 
-    if (typeId) {
-      params = params.append('typeId', typeId.toString());
+    if (shopParams.typeId !== 0) {
+      params = params.append('typeId', shopParams.typeId.toString());
     }
 
-    if (sort) {
-      params = params.append('sort', sort);
-    }
+    params = params.append('sort', shopParams.sort);
+    params = params.append('pageSize', shopParams.pageSize.toString());
+    params = params.append('pageIndex', shopParams.pageNumber.toString());
 
-    return this.http.get<IPagination>(this.baseUrl + 'products', { observe: 'response', params })
+    return this.http
+      .get<IPagination>(this.baseUrl + 'products', {
+        observe: 'response',
+        params,
+      })
       .pipe(
-        map(response => {
+        map((response) => {
           return response.body;
         })
       );
