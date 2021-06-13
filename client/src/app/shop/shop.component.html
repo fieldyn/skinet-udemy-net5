@@ -37,10 +37,8 @@
         </div>
       </div>
       <div *ngIf="this.totalCount && this.totalCount > 0" class="d-flex justify-content-center">
-        <pagination [boundaryLinks]="true" [totalItems]="totalCount" [itemsPerPage]="shopParams.pageSize"
-          (pageChanged)="onPageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
-          lastText="&raquo;">
-        </pagination>
+        <app-pager [pageSize]="this.shopParams.pageSize" [totalCount]="totalCount"
+          (pageChanged)="onPageChanged($event)"></app-pager>
       </div>
     </section>
   </div>
