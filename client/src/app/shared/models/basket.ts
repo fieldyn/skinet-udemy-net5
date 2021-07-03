@@ -7,6 +7,7 @@ export interface IBasketItem {
   pictureUrl: string;
   brand: string;
   type: string;
+  price: number;
 }
 
 export interface IBasket {
