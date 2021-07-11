@@ -26,6 +26,9 @@ namespace Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
@@ -38,7 +41,7 @@ namespace Infrastructure.Identity.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ZipCode")
+                    b.Property<string>("Zipcode")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
