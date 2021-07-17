@@ -32,7 +32,7 @@ namespace API
         opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
       });
 
-      services.AddIdentityServices();
+      services.AddIdentityServices(_config);
 
       services.AddDbContext<AppIdentityDbContext>(x =>
       {
@@ -70,6 +70,7 @@ namespace API
       app.UseStaticFiles();
       app.UseCors("CorsPolicy");
 
+      app.UseAuthentication();
       app.UseAuthorization();
 
       app.UseSwaggerDocumentation();
